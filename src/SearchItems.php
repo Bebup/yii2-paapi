@@ -13,7 +13,6 @@ use Amazon\ProductAdvertisingAPI\v1\com\amazon\paapi5\v1\Item;
 use Amazon\ProductAdvertisingAPI\v1\com\amazon\paapi5\v1\PartnerType;
 use Amazon\ProductAdvertisingAPI\v1\com\amazon\paapi5\v1\SearchItemsRequest;
 use Amazon\ProductAdvertisingAPI\v1\com\amazon\paapi5\v1\SearchItemsResource;
-use yii\base\Component;
 use yii\base\InvalidCallException;
 
 /**
@@ -21,7 +20,7 @@ use yii\base\InvalidCallException;
  *
  * @author gpayo
  */
-class SearchItems extends Component {
+class SearchItems extends AmazonPAAPI {
     /**
      * Searches Amazon DB in the index specified and with the keyword given
      *
