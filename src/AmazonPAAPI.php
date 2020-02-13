@@ -12,6 +12,7 @@ use Amazon\ProductAdvertisingAPI\v1\ApiException;
 use Amazon\ProductAdvertisingAPI\v1\com\amazon\paapi5\v1\api\DefaultApi;
 use Amazon\ProductAdvertisingAPI\v1\com\amazon\paapi5\v1\GetItemsRequest;
 use Amazon\ProductAdvertisingAPI\v1\com\amazon\paapi5\v1\Item;
+use Amazon\ProductAdvertisingAPI\v1\com\amazon\paapi5\v1\PartnerType;
 use Amazon\ProductAdvertisingAPI\v1\com\amazon\paapi5\v1\ProductAdvertisingAPIClientException;
 use Amazon\ProductAdvertisingAPI\v1\com\amazon\paapi5\v1\SearchItemsRequest;
 use Amazon\ProductAdvertisingAPI\v1\com\amazon\paapi5\v1\SearchItemsResource;
@@ -111,13 +112,17 @@ class AmazonPAAPI extends Component {
             'keywords' => $keyword,
             'itemCount' => $item_count,
             'resources' => $resources,
+            'partnerTag' => $this->partner_tag,
+            'partnerType' => PartnerType::ASSOCIATES,
         ]);
         $search_item_request = $this->getSearchItemRequest($data);
 
         try {
-            $search_items_response = $this->getApiInstance()->searchItems($search_item_request);
-            $item_result = $search_items_response->getSearchResult();
-            return $item_result->getItems();
+            return $this
+                ->getApiInstance()
+                ->searchItems($search_item_request)
+                ->getSearchResult()
+                ->getItems();
         } catch (ApiException $exception) {
             throw new InvalidCallException($this->getInvalidCallExceptionMessage($exception));
         } catch (\Exception $exception) {
@@ -142,6 +147,8 @@ class AmazonPAAPI extends Component {
         $ids = (array)$amazon_ids;
         $data = array_merge($extra, [
             'itemIds' => $ids,
+            'partnerTag' => $this->partner_tag,
+            'partnerType' => PartnerType::ASSOCIATES,
         ]);
         $get_item_request = $this->getItemRequest($data);
         try {
