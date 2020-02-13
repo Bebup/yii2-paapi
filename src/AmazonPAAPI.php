@@ -10,16 +10,12 @@ namespace bebup\amazonpaapi;
 
 use Amazon\ProductAdvertisingAPI\v1\ApiException;
 use Amazon\ProductAdvertisingAPI\v1\com\amazon\paapi5\v1\api\DefaultApi;
-use Amazon\ProductAdvertisingAPI\v1\com\amazon\paapi5\v1\GetItemsRequest;
-use Amazon\ProductAdvertisingAPI\v1\com\amazon\paapi5\v1\Item;
-use Amazon\ProductAdvertisingAPI\v1\com\amazon\paapi5\v1\PartnerType;
+use Amazon\ProductAdvertisingAPI\v1\com\amazon\paapi5\v1\ModelInterface;
 use Amazon\ProductAdvertisingAPI\v1\com\amazon\paapi5\v1\ProductAdvertisingAPIClientException;
 use Amazon\ProductAdvertisingAPI\v1\com\amazon\paapi5\v1\SearchItemsRequest;
-use Amazon\ProductAdvertisingAPI\v1\com\amazon\paapi5\v1\SearchItemsResource;
 use Amazon\ProductAdvertisingAPI\v1\Configuration;
 use GuzzleHttp\Client;
 use yii\base\Component;
-use yii\base\InvalidCallException;
 use yii\base\InvalidConfigException;
 
 /**
@@ -27,7 +23,7 @@ use yii\base\InvalidConfigException;
  *
  * @author gpayo
  */
-class AmazonPAAPI extends Component {
+abstract class AmazonPAAPI extends Component {
     /**
      * Amazon's access key for the API
      *
@@ -86,85 +82,6 @@ class AmazonPAAPI extends Component {
     }
 
     /**
-     * Searches Amazon DB in the index specified and with the keyword given
-     *
-     * For Indexes see:
-     * @link https://webservices.amazon.com/paapi5/documentation/use-cases/organization-of-items-on-amazon/search-index.html
-     *
-     * For Resources (check constants defined in SearchItemsResource
-     * @link https://webservices.amazon.com/paapi5/documentation/search-items.html#resources-parameter
-     * @see SearchItemsResource
-     *
-     * For Extras see:
-     * @see SearchItemsRequest::__construct()
-     *
-     * @param string $index      The Amazon index to use
-     * @param string $keyword    The keyword to search for
-     * @param int    $item_count The amount of items to return
-     * @param array  $resources  An array of resources
-     * @param array  $extra      The rest of possible SearchItemsRequest's contants
-     * @return Item[]
-     * @throws InvalidCallException
-     */
-    public function searchItems(string $index, string $keyword = '', int $item_count = 10, array $resources = [], array $extra = []): array {
-        $data = array_merge($extra, [
-            'searchIndex' => $index,
-            'keywords' => $keyword,
-            'itemCount' => $item_count,
-            'resources' => $resources,
-            'partnerTag' => $this->partner_tag,
-            'partnerType' => PartnerType::ASSOCIATES,
-        ]);
-        $search_item_request = $this->getSearchItemRequest($data);
-
-        try {
-            return $this
-                ->getApiInstance()
-                ->searchItems($search_item_request)
-                ->getSearchResult()
-                ->getItems();
-        } catch (ApiException $exception) {
-            throw new InvalidCallException($this->getInvalidCallExceptionMessage($exception));
-        } catch (\Exception $exception) {
-            throw new InvalidCallException($exception->getMessage());
-        }
-
-        return [];
-    }
-
-    /**
-     * Returns the Amazon items by the given id
-     *
-     * For Extras see:
-     * @see GetItemsRequest::__construct()
-     *
-     * @param string|string[] $amazon_ids A string or array of string with the Amazon ids to return
-     * @param array           $extra      An array of extra configs
-     * @return Item[]
-     * @throws InvalidCallException
-     */
-    public function getItems($amazon_ids, array $extra = []): array {
-        $ids = (array)$amazon_ids;
-        $data = array_merge($extra, [
-            'itemIds' => $ids,
-            'partnerTag' => $this->partner_tag,
-            'partnerType' => PartnerType::ASSOCIATES,
-        ]);
-        $get_item_request = $this->getItemRequest($data);
-        try {
-            $get_items_response = $this->getApiInstance()->getItems($get_item_request);
-            $item_result = $get_items_response->getItemsResult();
-            return $item_result->getItems();
-        } catch (ApiException $exception) {
-            throw new InvalidCallException($this->getInvalidCallExceptionMessage($exception));
-        } catch (\Exception $exception) {
-            throw new InvalidCallException($exception->getMessage());
-        }
-
-        return [];
-    }
-
-    /**
      * Formats an error message with the given ApiException object
      *
      * @param ApiException $exception
@@ -196,7 +113,7 @@ class AmazonPAAPI extends Component {
      * @return bool
      * @throws InvalidConfigException
      */
-    protected function checkForInvalidProperties(SearchItemsRequest $search_item_search): bool {
+    protected function checkForInvalidProperties(ModelInterface $search_item_search): bool {
         $invalid_property_list = $search_item_search->listInvalidProperties();
         $length = count($invalid_property_list);
         $message = [];
@@ -209,32 +126,6 @@ class AmazonPAAPI extends Component {
         }
 
         return true;
-    }
-
-    /**
-     * Returns a correctly populated SearchItemsRequest
-     *
-     * @param array $data
-     * @return SearchItemsRequest
-     */
-    protected function getSearchItemRequest(array $data): SearchItemsRequest {
-        $search_item_request = new SearchItemsRequest($data);
-        $this->checkForInvalidProperties($search_item_request);
-
-        return $search_item_request;
-    }
-
-    /**
-     * Returns a correctly populated GetItemsRequest
-     *
-     * @param array $data
-     * @return GetItemsRequest
-     */
-    protected function getItemRequest(array $data): GetItemsRequest {
-        $get_items_request = new GetItemsRequest($data);
-        $this->checkForInvalidProperties($get_items_request);
-
-        return $get_items_request;
     }
 
     /**
