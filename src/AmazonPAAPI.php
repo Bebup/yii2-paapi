@@ -236,10 +236,10 @@ class AmazonPAAPI extends Component {
      * @return DefaultApi
      */
     protected function getApiInstance(): DefaultApi {
-        if (!$this->api_instance) {
-            $this->api_instance = new DefaultApi(new Client(), $this->getConfig());
+        if (!$this::$api_instance) {
+            $this::$api_instance = new DefaultApi(new Client(), $this->getConfig());
         }
-        return $this->api_instance;
+        return $this::$api_instance;
     }
 
     /**
