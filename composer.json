@@ -4,7 +4,7 @@
     "type": "yii2-extension",
     "require": {
         "yiisoft/yii2": "^2.0@dev",
-        "thewirecutter/paapi5-php-sdk": "dev-master"
+        "thewirecutter/paapi5-php-sdk": "*"
     },
     "license": "LGPL-3.0+",
     "authors": [
@@ -18,7 +18,6 @@
             "bebup\\amazonpaapi\\": "src/"
         }
     },
-    "minimum-stability": "dev",
     "require-dev": {
         "phpunit/phpunit": "^9.1@dev"
     }
