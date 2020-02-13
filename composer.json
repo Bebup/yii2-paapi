@@ -1,5 +1,5 @@
 {
-    "name": "bebup/yii2-paapi-php",
+    "name": "bebup/yii2-paapi",
     "description": "The extension to use Amazon's PA API with Yii2 apps",
     "type": "yii2-extension",
     "require": {
