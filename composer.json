@@ -1,0 +1,25 @@
+{
+    "name": "bebup/yii2-paapi-php",
+    "description": "The extension to use Amazon's PA API with Yii2 apps",
+    "type": "yii2-extension",
+    "require": {
+        "yiisoft/yii2": "^2.0@dev",
+        "thewirecutter/paapi5-php-sdk": "dev-master"
+    },
+    "license": "LGPL-3.0+",
+    "authors": [
+        {
+            "name": "Gonzalo Payo",
+            "email": "devel@bebup.es"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "bebup\\amazonpaapi\\": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "require-dev": {
+        "phpunit/phpunit": "^9.1@dev"
+    }
+}
