@@ -19,7 +19,7 @@ use yii\base\InvalidCallException;
  *
  * @author gpayo
  */
-class GetItems extends AmazonPAAPI {
+class AmazonItem extends AmazonPAAPI {
     /**
      * Returns the Amazon items by the given id
      *

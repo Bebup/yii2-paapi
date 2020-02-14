@@ -16,11 +16,9 @@ use Amazon\ProductAdvertisingAPI\v1\com\amazon\paapi5\v1\SearchItemsResource;
 use yii\base\InvalidCallException;
 
 /**
- *
- *
  * @author gpayo
  */
-class SearchItems extends AmazonPAAPI {
+class AmazonSearchItem extends AmazonPAAPI {
     /**
      * Searches Amazon DB in the index specified and with the keyword given
      *
@@ -42,7 +40,7 @@ class SearchItems extends AmazonPAAPI {
      * @return Item[]
      * @throws InvalidCallException
      */
-    public function searchItems(string $index, string $keyword = '', int $item_count = 10, array $resources = [], array $extra = []): array {
+    public function getItems(string $index, string $keyword = '', int $item_count = 10, array $resources = [], array $extra = []): array {
         $data = array_merge($extra, [
             'searchIndex' => $index,
             'keywords' => $keyword,
