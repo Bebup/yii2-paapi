@@ -42,6 +42,12 @@ class AmazonItem extends AmazonPAAPI {
         try {
             $get_items_response = $this->getApiInstance()->getItems($get_item_request);
             $item_result = $get_items_response->getItemsResult();
+
+            // Have we found something?
+            if (empty($item_result)) {
+                return [];
+            }
+
             return $item_result->getItems();
         } catch (ApiException $exception) {
             throw new InvalidCallException($this->getInvalidCallExceptionMessage($exception));
