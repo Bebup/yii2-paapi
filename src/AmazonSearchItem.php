@@ -52,11 +52,14 @@ class AmazonSearchItem extends AmazonPAAPI {
         $search_item_request = $this->getSearchItemRequest($data);
 
         try {
-            return $this
+            $search_result = $this
                 ->getApiInstance()
                 ->searchItems($search_item_request)
-                ->getSearchResult()
-                ->getItems();
+                ->getSearchResult();
+            if (!$search_result) {
+                return [];
+            }
+            return $search_result->getItems();
         } catch (ApiException $exception) {
             throw new InvalidCallException($this->getInvalidCallExceptionMessage($exception));
         } catch (\Exception $exception) {
