@@ -40,7 +40,7 @@ class AmazonSearchItem extends AmazonPAAPI {
      * @return Item[]
      * @throws InvalidCallException
      */
-    public function getItems(string $index, string $keyword = '', int $item_count = 10, array $resources = [], array $extra = []): array {
+    public function getItems(string $index, ?string $keyword = '', int $item_count = 10, array $resources = [], array $extra = []): array {
         $data = array_merge($extra, [
             'searchIndex' => $index,
             'keywords' => $keyword,
