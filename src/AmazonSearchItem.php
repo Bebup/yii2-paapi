@@ -59,7 +59,7 @@ class AmazonSearchItem extends AmazonPAAPI {
             if (!$search_result) {
                 return [];
             }
-            return $search_result->getItems();
+            return (array)$search_result->getItems();
         } catch (ApiException $exception) {
             throw new InvalidCallException($this->getInvalidCallExceptionMessage($exception));
         } catch (\Exception $exception) {
